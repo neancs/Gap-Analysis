@@ -77,7 +77,7 @@ def test_no_gap_scenario():
 
 def test_single_course_gap():
     """Tests with only one course having a gap."""
-    student_info = {"name": "Charlie"}
+    student_info = {"name": "Charlie Puth"}
     enrolled_courses = {"History": 2.5}
     peer_grades = {"History": 2.0}
 
