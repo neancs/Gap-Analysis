@@ -23,5 +23,9 @@ jobs:
         run: |
          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+      - name: Set up SQLite (DemoDB)
+        run: |
+         python -c "import sqlite3; conn = sqlite3.connect('demodb.sqlite3'); conn.execute('CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT);'); conn.close()"
+
       - name: Run Tests
-        run: pytest
+        run: pytest 

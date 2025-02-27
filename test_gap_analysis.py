@@ -58,7 +58,7 @@ def test_generate_recommendations(sample_data):
     assert isinstance(recommendations["Courses to Improve"], list)
     assert isinstance(recommendations["Career Fit Suggestions"], str)
 
-# ➤ Additional Simple Tests
+#  Additional Simple Tests
 
 def test_no_gap_scenario():
     """Tests when the student already meets or exceeds all required grades."""
