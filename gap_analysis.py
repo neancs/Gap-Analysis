@@ -1,35 +1,48 @@
-class GapAnalysis:
-    def __init__(self, student_info, enrolled_courses, peer_grades):
-        self.student_info = student_info  # Dictionary with student details
-        self.enrolled_courses = enrolled_courses  # {course_name: current_grade}
-        self.peer_grades = peer_grades  # {course_name: required_grade}
-
-    def compute_gap_scores(self):
-        gap_scores = {}
-        total_gap_score = 0
-
-        for course, current_grade in self.enrolled_courses.items():
-            required_grade = self.peer_grades.get(course, current_grade)  # Get highest peer grade
-            gap = required_grade - current_grade
-            gap_scores[course] = gap
-            total_gap_score += gap
-
-        return gap_scores, total_gap_score
-
-    def generate_recommendations(self):
-        gap_scores, total_gap = self.compute_gap_scores()
-
-        if total_gap >= 0:
-            return "Exceeding Expectations – Great Work!", {}
-
-        sorted_gaps = sorted(gap_scores.items(), key=lambda x: x[1])  # Sort by lowest gap first
-        recommendations = {
-            "Courses to Improve": [course for course, gap in sorted_gaps if gap < 0],
-            "Career Fit Suggestions": "Focus on strengthening weak areas for career growth."
+def gap_analysis(student_info, enrolled_courses, peer_grades):
+    if not enrolled_courses:
+        return "No courses enrolled. No GAP analysis can be performed."
+    
+    gap_scores = {}
+    total_gap = 0.0
+    missing_grades = False
+    
+    for course, student_grade in enrolled_courses.items():
+        peer_grade = peer_grades.get(course)
+        
+        if student_grade is None:
+            missing_grades = True
+            gap_scores[course] = "N/A"
+            continue
+        
+        if student_grade == "INC":
+            gap_scores[course] = "N/A"
+            return f"You need to complete '{course}' before a GAP analysis can be done."
+        
+        if peer_grade is None:
+            continue
+        
+        gap_score = peer_grade - student_grade
+        gap_scores[course] = round(gap_score, 2)
+        total_gap += gap_score
+    
+    if not peer_grades:
+        return "No peer grade data available. Unable to analyze gaps."
+    
+    if missing_grades:
+        return "No grades provided. Please update your records."
+    
+    if not gap_scores:
+        return "Peer grade data does not match enrolled courses. Please check the input data."
+    
+    if total_gap < 0:
+        return {
+            "Total GAP Score": total_gap, 
+            "GAP Scores": gap_scores,
+            "Recommendations": "Suggested courses to improve, strengths, and career fit"
         }
-
-        return recommendations, gap_scores
-
-
-
-
+    
+    return {
+        "Total GAP Score": total_gap,
+        "GAP Scores": gap_scores,
+        "Recommendations": "Exceeding Expectations - Great Work!"
+    }
