@@ -9,9 +9,9 @@ student_info = {
 }
 
 enrolled_courses = {
-    "Embedded Systems": "INC",
+    "Embedded Systems": 1.5,
     "Artificial Intelligence": 1.75,
-    "Computer Networks": 2.0,
+    "Computer Networks": "INC/2.0",
     "Software Engineering": 1.75
 }
 

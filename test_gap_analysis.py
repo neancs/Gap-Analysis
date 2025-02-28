@@ -109,11 +109,19 @@ def test_no_indicated_course_in_peer_grades(sample_data):
     assert result == "Peer grade data does not match enrolled courses. Please check the input data."
 
 def test_incomplete_grade(sample_data):
-    """Tests if the function correctly handles incomplete grades (INC)."""
+    """Tests if the function correctly handles 'INC/(grade)' scenarios."""
     student_info, enrolled_courses, peer_grades = sample_data
-    enrolled_courses["Embedded Systems"] = "INC"  # Set "Embedded Systems" to INC
-
+    
+    # Case 1: "INC" without a grade should return an error message
+    enrolled_courses["Embedded Systems"] = "INC"
     result = gap_analysis(student_info, enrolled_courses, peer_grades)
-
     assert result == "You need to complete 'Embedded Systems' before a GAP analysis can be done."
+
+    # Case 2: "INC/(grade)" should compute normally
+    enrolled_courses["Embedded Systems"] = "INC/2.5"
+    result = gap_analysis(student_info, enrolled_courses, peer_grades)
+    
+    assert "Embedded Systems" in result["GAP Scores"]
+    assert result["Incomplete Courses Considered"] == ["Embedded Systems"]
+
 
